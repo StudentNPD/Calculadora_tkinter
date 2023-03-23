@@ -4,6 +4,10 @@ root = Tk() #modulo que iniciará la ventana
 root.title("Calculator")
 
 i = 0
+
+display = Entry(root) # display = input
+display.grid(row=1, columnspan=6, sticky= W+E) # (fila - columna - orientacion para que el botón abarquen más)
+
 # FUNCIÓN OBTENER NÚMERO
 # Guardamos el indice en una variable para que vaya incrementando
 def get_numbers(n):
@@ -33,9 +37,18 @@ def undo():
         clear_display()
         display.insert(0, 'ERROR')
 
+# CALCULAR
+def calculate():
+    display_state = display.get()
+    try:
+        math_expression =  compile(display_state, 'app.py', 'eval')
+        result = eval(math_expression)
+        clear_display()
+        display.insert(0,result)
+    except:
+        clear_display()
+        display.insert(0,"error")
 
-display = Entry(root) # display = input
-display.grid(row=1, columnspan=6, sticky= W+E) # (fila - columna - orientacion para que el botón abarquen más)
 
 # NUMERIC 1 - 9 BUTTONS
 Button(root, text="1", command=lambda:get_numbers(1)).grid(row=2, column="0", sticky= W+E) # clase(montado en root - que dirá)donde estará ubicado
@@ -67,6 +80,6 @@ Button(root, text="exp", command=lambda:get_operation("**")).grid(row=3, column=
 Button(root, text="^2", command=lambda:get_operation("**2")).grid(row=3, column="5", sticky= W+E)
 Button(root, text="(", command=lambda:get_operation("(")).grid(row=4, column="4", sticky= W+E)
 Button(root, text=")", command=lambda:get_operation(")")).grid(row=4, column="5", sticky= W+E)
-Button(root, text="=").grid(row=5, column="4", sticky= W+E, columnspan=2)
+Button(root, text="=", command=lambda:calculate()).grid(row=5, column="4", sticky= W+E, columnspan=2)
 
 root.mainloop()
